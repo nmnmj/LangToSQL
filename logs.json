@@ -1,0 +1,186 @@
+[
+  {
+    "timestamp": "2025-10-24T19:15:32.459Z",
+    "inputQuery": "show all the out of stock products",
+    "response": {
+      "inputQuery": "show all the out of stock products",
+      "generatedSQL": "SELECT * FROM products WHERE stock = 0",
+      "sqlExplanation": "This SQL query selects all the products that are currently out of stock.",
+      "tablesUsed": [
+        "products"
+      ],
+      "columnsUsed": [
+        "product_id",
+        "product_name",
+        "category_id",
+        "price",
+        "stock",
+        "created_at"
+      ],
+      "filtersApplied": [
+        {
+          "column": "stock",
+          "operator": "=",
+          "value": "0"
+        }
+      ],
+      "erdImage": "E:\\LangToSQL\\erd\\ERD.png"
+    }
+  },
+  {
+    "timestamp": "2025-10-25T06:14:47.461Z",
+    "inputQuery": "show all the out of stock products",
+    "response": {
+      "inputQuery": "show all the out of stock products",
+      "generatedSQL": "SELECT * FROM products WHERE stock = 0",
+      "sqlExplanation": "This query retrieves all products that are out of stock.",
+      "tablesUsed": [
+        "products"
+      ],
+      "columnsUsed": [
+        "product_id",
+        "product_name",
+        "category_id",
+        "price",
+        "stock",
+        "created_at"
+      ],
+      "filtersApplied": [
+        {
+          "column": "stock",
+          "operator": "=",
+          "value": "0"
+        }
+      ],
+      "erdImage": "E:\\LangToSQL\\erd\\schema.svg",
+      "sqlResult": []
+    }
+  },
+  {
+    "timestamp": "2025-10-25T06:16:00.154Z",
+    "inputQuery": "show all the products that are less than 30 items",
+    "response": {
+      "inputQuery": "show all the products that are less than 30 items",
+      "generatedSQL": "SELECT * FROM products WHERE stock < 30",
+      "sqlExplanation": "This query selects all products from the 'products' table where the stock quantity is less than 30.",
+      "tablesUsed": [
+        "products"
+      ],
+      "columnsUsed": [
+        "product_id",
+        "product_name",
+        "category_id",
+        "price",
+        "stock",
+        "created_at"
+      ],
+      "filtersApplied": [
+        {
+          "column": "stock",
+          "operator": "<",
+          "value": "30"
+        }
+      ],
+      "erdImage": "E:\\LangToSQL\\erd\\schema.svg",
+      "sqlResult": [
+        {
+          "product_id": 1,
+          "product_name": "iPhone 14",
+          "category_id": 1,
+          "price": "79999.00",
+          "stock": 25,
+          "created_at": "2024-12-01T04:30:00.000Z"
+        },
+        {
+          "product_id": 2,
+          "product_name": "Samsung Galaxy S23",
+          "category_id": 1,
+          "price": "74999.00",
+          "stock": 20,
+          "created_at": "2024-12-02T05:30:00.000Z"
+        },
+        {
+          "product_id": 4,
+          "product_name": "Air Fryer",
+          "category_id": 3,
+          "price": "6999.00",
+          "stock": 15,
+          "created_at": "2024-12-07T08:30:00.000Z"
+        },
+        {
+          "product_id": 8,
+          "product_name": "LG Refrigerator",
+          "category_id": 3,
+          "price": "45999.00",
+          "stock": 10,
+          "created_at": "2024-12-11T05:15:00.000Z"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-10-25T06:22:50.408Z",
+    "inputQuery": "show all the products that are more than 30 items",
+    "response": {
+      "inputQuery": "show all the products that are more than 30 items",
+      "generatedSQL": "SELECT * FROM products WHERE stock > 30",
+      "sqlExplanation": "This query selects all columns from the 'products' table where the stock quantity is greater than 30.",
+      "tablesUsed": [
+        "products"
+      ],
+      "columnsUsed": [
+        "stock"
+      ],
+      "filtersApplied": [
+        {
+          "column": "stock",
+          "operator": ">",
+          "value": "30"
+        }
+      ],
+      "erdImage": "E:\\LangToSQL\\erd\\schema.svg",
+      "sqlResult": [
+        {
+          "product_id": 3,
+          "product_name": "Men Cotton Shirt",
+          "category_id": 2,
+          "price": "1499.00",
+          "stock": 50,
+          "created_at": "2024-12-05T05:00:00.000Z"
+        },
+        {
+          "product_id": 5,
+          "product_name": "Yoga Mat",
+          "category_id": 5,
+          "price": "899.00",
+          "stock": 40,
+          "created_at": "2024-12-08T03:30:00.000Z"
+        },
+        {
+          "product_id": 6,
+          "product_name": "Cooking Made Easy",
+          "category_id": 4,
+          "price": "499.00",
+          "stock": 100,
+          "created_at": "2024-12-09T06:30:00.000Z"
+        },
+        {
+          "product_id": 9,
+          "product_name": "Women Kurti",
+          "category_id": 2,
+          "price": "1299.00",
+          "stock": 60,
+          "created_at": "2024-12-12T10:30:00.000Z"
+        },
+        {
+          "product_id": 10,
+          "product_name": "Bluetooth Headphones",
+          "category_id": 1,
+          "price": "2999.00",
+          "stock": 35,
+          "created_at": "2024-12-13T07:30:00.000Z"
+        }
+      ]
+    }
+  }
+]

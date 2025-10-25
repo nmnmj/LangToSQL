@@ -1,0 +1,114 @@
+Enum "orders_status_enum" {
+  "Pending"
+  "Shipped"
+  "Delivered"
+  "Cancelled"
+}
+
+Enum "payments_payment_method_enum" {
+  "Credit Card"
+  "Debit Card"
+  "UPI"
+  "Wallet"
+  "Cash"
+}
+
+Enum "payments_payment_status_enum" {
+  "Pending"
+  "Completed"
+  "Failed"
+}
+
+Enum "addresses_address_type_enum" {
+  "Home"
+  "Office"
+  "Other"
+}
+
+Table "users" {
+  "user_id" INT [pk, increment]
+  "first_name" VARCHAR(50)
+  "last_name" VARCHAR(50)
+  "email" VARCHAR(100) [unique]
+  "phone" VARCHAR(15)
+  "created_at" DATETIME [default: `CURRENT_TIMESTAMP`]
+}
+
+Table "categories" {
+  "category_id" INT [pk, increment]
+  "category_name" VARCHAR(100) [not null]
+  "description" TEXT
+}
+
+Table "products" {
+  "product_id" INT [pk, increment]
+  "product_name" VARCHAR(100) [not null]
+  "category_id" INT
+  "price" DECIMAL(10,2)
+  "stock" INT
+  "created_at" DATETIME [default: `CURRENT_TIMESTAMP`]
+}
+
+Table "orders" {
+  "order_id" INT [pk, increment]
+  "user_id" INT
+  "order_date" DATETIME [default: `CURRENT_TIMESTAMP`]
+  "status" orders_status_enum [default: 'Pending']
+  "total_amount" DECIMAL(10,2)
+  "shipping_address_id" INT
+}
+
+Table "order_items" {
+  "order_item_id" INT [pk, increment]
+  "order_id" INT
+  "product_id" INT
+  "quantity" INT
+  "price" DECIMAL(10,2)
+}
+
+Table "payments" {
+  "payment_id" INT [pk, increment]
+  "order_id" INT
+  "payment_method" payments_payment_method_enum
+  "amount" DECIMAL(10,2)
+  "payment_status" payments_payment_status_enum [default: 'Pending']
+  "payment_date" DATETIME [default: `CURRENT_TIMESTAMP`]
+}
+
+Table "reviews" {
+  "review_id" INT [pk, increment]
+  "user_id" INT
+  "product_id" INT
+  "rating" INT [constraint: `rating BETWEEN 1 AND 5`]
+  "comment" TEXT
+  "created_at" DATETIME [default: `CURRENT_TIMESTAMP`]
+}
+
+Table "addresses" {
+  "address_id" INT [pk, increment]
+  "user_id" INT
+  "line1" VARCHAR(255)
+  "city" VARCHAR(100)
+  "state" VARCHAR(100)
+  "country" VARCHAR(100)
+  "postal_code" VARCHAR(20)
+  "address_type" addresses_address_type_enum [default: 'Home']
+}
+
+Ref:"categories"."category_id" < "products"."category_id"
+
+Ref:"users"."user_id" < "orders"."user_id"
+
+Ref:"addresses"."address_id" < "orders"."shipping_address_id"
+
+Ref:"orders"."order_id" < "order_items"."order_id"
+
+Ref:"products"."product_id" < "order_items"."product_id"
+
+Ref:"orders"."order_id" < "payments"."order_id"
+
+Ref:"users"."user_id" < "reviews"."user_id"
+
+Ref:"products"."product_id" < "reviews"."product_id"
+
+Ref:"users"."user_id" < "addresses"."user_id"
