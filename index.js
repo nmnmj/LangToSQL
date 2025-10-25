@@ -4,6 +4,8 @@ const OpenAI = require("openai");
 const fs = require("fs");
 const path = require("path");
 const mysql = require("mysql2/promise");
+const { Parser } = require("node-sql-parser");
+const parser = new Parser();
 const { sqlToDbml } = require("./convertSqlToDbml");
 const { dbmlToErd } = require("./dbmlToErd");
 require("dotenv").config();
@@ -44,9 +46,28 @@ if (!fs.existsSync(ERD_DIR)) fs.mkdirSync(ERD_DIR);
 // ---------- 2️⃣ SQL Validator ----------
 function validateSQL(sql) {
   if (!sql) return false;
-  const forbidden = ["DROP", "DELETE", "INSERT", "UPDATE"];
-  const upper = sql.toUpperCase();
-  return !forbidden.some((op) => upper.includes(op));
+
+  try {
+    // Parse the SQL
+    const ast = parser.astify(sql, { database: "mysql" });
+
+    // Normalize to array if single statement
+    const statements = Array.isArray(ast) ? ast : [ast];
+
+    // Check each statement type
+    for (const stmt of statements) {
+      const type = stmt.type.toUpperCase();
+      if (["INSERT", "UPDATE", "DELETE", "DROP"].includes(type)) {
+        return false;
+      }
+    }
+
+    return true;
+  } catch (err) {
+    // If parsing fails, consider it invalid
+    console.error("SQL parse error:", err.message);
+    return false;
+  }
 }
 
 // ---------- 3️⃣ Logging ----------
@@ -77,8 +98,8 @@ ${schema}
 
 Rules:
 1. Never hallucinate tables/columns.
-2. Only read-only queries (no DROP, DELETE, INSERT, UPDATE).
-3. For ambiguous queries, output JSON with {"generatedSQL": null, "clarify": "<your question>"}.
+2. generatedSQL should show all the associated details the user is asking in query: ${query}.
+3. Only read-only queries (no DROP, DELETE, INSERT, UPDATE).
 4. Output JSON ONLY in this exact format:
 {
   "inputQuery": "${query}",
