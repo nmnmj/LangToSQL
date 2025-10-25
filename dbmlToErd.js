@@ -1,5 +1,6 @@
 const { exec } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 /**
  * Convert DBML file to ERD image (SVG/PNG)
@@ -13,12 +14,18 @@ function dbmlToErd(inputDbmlPath, outputImagePath) {
     const inputPath = path.resolve(inputDbmlPath);
     const outputPath = path.resolve(outputImagePath);
 
+    // Check if ERD already exists
+    if (fs.existsSync(outputPath)) {
+      console.log(`ℹ️ ERD already exists at: ${outputPath}, skipping generation.`);
+      return resolve();
+    }
+
     // Build CLI command
     const cmd = `npx @softwaretechnik/dbml-renderer -i "${inputPath}" -o "${outputPath}"`;
 
     exec(cmd, (error, stdout, stderr) => {
       if (error) {
-        return reject(new Error(`Failed to generate ERD: ${error.message}\n${stderr}`));
+        return reject(new Error(`Failed to generate ERD: ${stderr || error.message}`));
       }
       console.log(`✅ ERD generated at: ${outputPath}`);
       resolve();
@@ -29,7 +36,7 @@ function dbmlToErd(inputDbmlPath, outputImagePath) {
 // Example usage
 // (async () => {
 //   try {
-//     await dbmlToErd('./schema.dbml', './schema.svg');
+//     await dbmlToErd('./schema.dbml', './erd/schema.svg');
 //   } catch (err) {
 //     console.error(err.message);
 //   }
