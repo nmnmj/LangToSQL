@@ -129,7 +129,7 @@ Input query: "${query}"
     parsed.sqlResult = sqlResult; 
 
     parsed.inputQuery = query;
-    logRequest(query, parsed);
+    // logRequest(query, parsed);
 
     res.json(parsed);
   } catch (err) {
