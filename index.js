@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 const SCHEMA_FILE = "./schema.sql";
 const ERD_DIR = path.join(__dirname, "erd");
 
+app.use("/erd", express.static(path.join(__dirname, "erd")));
 
 // ---------- Create MySQL pool ----------
 const pool = mysql.createPool({
@@ -88,7 +89,7 @@ Rules:
   "filtersApplied": [
     { "column": "<column>", "operator": "<operator>", "value": "<value>" }
   ],
-  "erdImage": "${path.resolve("./erd/schema.svg")}"
+  "erdImage": "https://lang-to-sql.vercel.app/erd/schema.svg"
 }
 
 Input query: "${query}"
