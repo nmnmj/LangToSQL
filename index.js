@@ -100,7 +100,8 @@ Rules:
 1. Never hallucinate tables/columns.
 2. generatedSQL should show all the associated details the user is asking in query: ${query}.
 3. Only read-only queries (no DROP, DELETE, INSERT, UPDATE).
-4. Output JSON ONLY in this exact format:
+4. Use SQL clauses and functions like LIKE, BETWEEN, IN, joins, unions, aggregate functions, scalar functions, GROUP BY, HAVING, and WHERE.
+5. Output JSON ONLY in this exact format:
 {
   "inputQuery": "${query}",
   "generatedSQL": "<SQL query>",
