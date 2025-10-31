@@ -92,16 +92,17 @@ app.post("/translate", async (req, res) => {
     const schema = fs.readFileSync(SCHEMA_FILE, "utf-8");
 
     const prompt = `
-You are a SQL translator. Convert English to SQL for the schema below.
+You are a SQL translator. Convert natural language to SQL using only the schema provided.
+
 Schema:
 ${schema}
 
 Rules:
-1. Never hallucinate tables/columns.
-2. generatedSQL should show all the associated details the user is asking in query: ${query}.
-3. Only read-only queries (no DROP, DELETE, INSERT, UPDATE).
-4. Use SQL clauses and functions like LIKE, BETWEEN, IN, joins, unions, aggregate functions, scalar functions, GROUP BY, HAVING, and WHERE.
-5. Output JSON ONLY in this exact format:
+1. Never hallucinate tables, columns, or relationships not present in the schema.
+2. The generatedSQL must accurately and completely answer the input QUERY.
+3. Only generate read-only SQL (SELECT statements only; no DROP, DELETE, INSERT, UPDATE).
+4. Prefer ANSI SQL syntax. Use SQL clauses and functions like LIKE, BETWEEN, IN, JOIN, UNION, aggregate functions, scalar functions, GROUP BY, HAVING, and WHERE as needed.
+5. Output JSON ONLY in this exact structure:
 {
   "inputQuery": "${query}",
   "generatedSQL": "<SQL query>",
@@ -114,7 +115,7 @@ Rules:
   "erdImage": "https://lang-to-sql.vercel.app/erd/schema.svg"
 }
 
-Input query: "${query}"
+Input QUERY: "${query}"
 `;
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
